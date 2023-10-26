@@ -47,20 +47,17 @@ const numSelectables = imageUrls.length;
 const selectHeight = selectCanvas.height / numSelectables;
 
 //creating the tilemap nested array
-let tilemap: HTMLImageElement[][] = new Array(numTiles);
+let tilemap: number[][] = new Array(numTiles);
 
 for (let i = 0; i < numTiles; i++) {
   let row = new Array(numTiles);
   for (let j = 0; j < numTiles; j++) {
-    // row[j] = new Image();
-    // row[j].src = "/tile1.png";
-    row[j] = images[currentImage];
+    row[j] = currentImage;
   }
   tilemap[i] = row;
 }
 
 //track the selected tile
-//let currentTile = "/tile1.png";
 
 //draw the initial canvases
 redrawTilemap();
@@ -78,6 +75,7 @@ function drawTexture(
 ) {
   image.onload = () => {
     ctx.drawImage(image, row * cellSize, col * cellSize, width, height);
+    console.log("image loaded");
   };
   ctx.drawImage(image, row * cellSize, col * cellSize, width, height);
 }
@@ -92,7 +90,7 @@ function redrawTilemap() {
         i,
         j,
         gridCtx,
-        tilemap[i][j],
+        images[tilemap[i][j]],
         gridCanvas.width / numTiles,
         gridCanvas.height / numTiles,
         tileSize
@@ -105,7 +103,7 @@ gridCanvas.addEventListener("click", (e) => {
   const coordX = Math.trunc(e.offsetX / tileSize);
   const coordY = Math.trunc(e.offsetY / tileSize);
 
-  tilemap[coordX][coordY] = images[currentImage];
+  tilemap[coordX][coordY] = currentImage;
   redrawTilemap();
 });
 
@@ -114,8 +112,6 @@ gridCanvas.addEventListener("click", (e) => {
 // Loop through the selectable tiles and draw textures in each cell
 function drawSelectCanvas() {
   for (let i = 0; i < numSelectables; i++) {
-    // const selectableImage = new Image();
-    // selectableImage.src = imageUrls[i];
     const selectableImage = images[i];
     drawTexture(
       0,
